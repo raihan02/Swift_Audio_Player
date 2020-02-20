@@ -13,12 +13,17 @@ class SecondPageViewController: UIViewController {
     @IBOutlet weak var songNameLabel: UILabel!
     @IBOutlet weak var currentSlider: UISlider!
     
+    @IBOutlet weak var currentSongTimeLabel: UILabel!
+    
+    
     @IBOutlet weak var volumeSlider: UISlider!
     override func viewDidLoad() {
         super.viewDidLoad()
         songNameLabel.text = songsList[thisSong]
         currentSlider.maximumValue = Float(TimeInterval(audioPlayer.duration))
         currentSlider.minimumValue = 0
+        //currentSongTimeLabel.text = String(0)
+       updateCurrentSlider()
 
     }
     
@@ -48,8 +53,9 @@ class SecondPageViewController: UIViewController {
        {
         thisSong = songsList.count - 1;
         playSong(currentSong : songsList[thisSong])
-        
+        songNameLabel.text = songsList[thisSong]
        }
+        viewDidLoad()
     }
     
     
@@ -65,6 +71,7 @@ class SecondPageViewController: UIViewController {
         else {
             thisSong = 0
             songNameLabel.text = songsList[thisSong]
+             playSong(currentSong : songsList[thisSong])
              
         }
         
@@ -93,6 +100,7 @@ class SecondPageViewController: UIViewController {
         audioPlayer.stop()
         audioPlayer.currentTime = TimeInterval(sender.value)
         audioPlayer.play()
+        audioPlayer.prepareToPlay()
     }
     
     
@@ -110,7 +118,15 @@ class SecondPageViewController: UIViewController {
         
     }
     
-    
-    
-    
+    func updateCurrentSlider()
+    {
+        _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { timer in
+            self.currentSlider.value = Float(audioPlayer.currentTime)
+                        NSLog("Hello")
+            })
+        
+        
+    }
+
 }
+
